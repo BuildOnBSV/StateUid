@@ -4,7 +4,7 @@ const { DataLen, loadDesc, deployContract, sendTx, createInputFromPrevTx, showEr
 (async() => {
     try {
         const StateUid = buildContractClass(loadDesc('stateuid_release_desc.json'))
-        const counter = new StateUid(9, new Bytes('01'))
+        const counter = new StateUid(9)
 
         let amount = 8000
         // lock fund to the script
