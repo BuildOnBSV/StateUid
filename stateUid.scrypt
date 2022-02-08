@@ -1,0 +1,28 @@
+
+contract StateUid {
+
+    @state
+    int counter;
+
+    @state
+    bytes uid;
+
+    constructor (int counter, bytes uid){
+        this.uid = b'00';
+    }
+
+    public function unlock(SigHashPreimage txPreimage, int amount, bytes identifier) {
+        require(Tx.checkPreimage(txPreimage));
+        // increment counter
+        this.counter++;
+       
+        if (this.uid == b'00'){
+           this.uid = SigHash.hashPrevouts(txPreimage);
+        } else {
+           require(identifier == this.uid);
+        }
+        bytes outputScript = this.getStateScript();
+        bytes output = Utils.buildOutput(outputScript, amount);
+        require(hash256(output) == SigHash.hashOutputs(txPreimage));
+    }
+}
